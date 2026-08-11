@@ -1,0 +1,9 @@
+1. 在input_data目录读取configs/base_flags.json、changes/patch_queue.jsonl和policy下的三份规则文件，按flag_key、change_id和tenant_id建立索引。
+2. 使用Node.js逐行解析patch_queue.jsonl，把每个target_tenants成员展开为独立裁决记录，无法解析的行使本批次非零退出。
+3. 按release_contract.json的decision_order依次检查开关、审批、min_app_version和租户状态，版本通过严格正则拆成三个整数段比较。
+4. 用structuredClone建立租户配置副本，解析JSON Pointer并执行test、replace和add，任一步失败都丢弃该副本。
+5. 读取tenant_policy.csv中的max_ramp检查补丁结果，把通过配置写入租户状态，把拒绝原因写入决策账。
+6. 使用稳定键序列化配置，在output/configs下按tenant_id和flag_key落盘，并将实际相对路径写入矩阵。
+7. 导出release_decisions.csv与tenant_release_matrix.csv，按change_id加tenant_id及tenant_id加flag_key分别检查唯一性。
+8. 从决策账和配置目录计算release_summary.json中的批次信息、裁决计数、原因分布、发布租户和配置清单。
+9. 执行npm run release，使用Node.js退出状态和生成文件复核本批发布结果。

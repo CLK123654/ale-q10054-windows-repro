@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "result": "PASS",
+  "scanned_sources": 233,
+  "violations": [],
+  "answer_sheets": [
+    "交付物答案清单",
+    "固定字段答案",
+    "固定集合答案",
+    "固定数值答案",
+    "允许变体答案"
+  ],
+  "specification_sheets": [
+    "任务规格转化"
+  ],
+  "task_spec_columns": [
+    "模块",
+    "规格内容"
+  ],
+  "forbidden_spec_labels": [],
+  "declared_delivery_paths": [
+    "output/configs/alpha/checkout_v2.json",
+    "output/configs/alpha/notify_center.json",
+    "output/configs/gamma/notify_center.json",
+    "output/configs/gamma/search_boost.json",
+    "output/reports/release_decisions.csv",
+    "output/reports/release_summary.json",
+    "output/reports/tenant_release_matrix.csv",
+    "output/src/compile_release.mjs"
+  ],
+  "reference_paths": [
+    "output/configs/alpha/checkout_v2.json",
+    "output/configs/alpha/notify_center.json",
+    "output/configs/gamma/notify_center.json",
+    "output/configs/gamma/search_boost.json",
+    "output/reports/release_decisions.csv",
+    "output/reports/release_summary.json",
+    "output/reports/tenant_release_matrix.csv",
+    "output/src/compile_release.mjs"
+  ]
+}

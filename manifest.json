@@ -1,0 +1,57 @@
+{
+  "task_asset_id": "node_feature_flag_tenant_release",
+  "software": "Node.js",
+  "runner": "windows-2025",
+  "node_major": 24,
+  "entrypoint": "npm run release",
+  "attachments": {
+    "输入数据包.zip": "bb98c50865de9f3486288f098a3e4f6551a681748eebc92680248ef9fe997231",
+    "reference.zip": "2aff2879fe88471c5a59ea14da10556ceee746caf8652d663512065ab22a4084",
+    "关键标准答案.xlsx": "6ec1d15f7a6b4fe89e8a440b233067daeedcc1192294f929f99fbdc250aabbd3",
+    "任务规格转化.xlsx": "9dc4bf7b9a574b8fe523fb8c466b917c712449d1609623a0fcb424b8044a0c7c"
+  },
+  "input_members": [
+    "input_data/",
+    "input_data/tools/",
+    "input_data/tools/run-release.mjs",
+    "input_data/changes/",
+    "input_data/changes/patch_queue.jsonl",
+    "input_data/README.md",
+    "input_data/package.json",
+    "input_data/starter/",
+    "input_data/starter/compile_release.mjs",
+    "input_data/configs/",
+    "input_data/configs/base_flags.json",
+    "input_data/policy/",
+    "input_data/policy/tenant_policy.csv",
+    "input_data/policy/approvals.csv",
+    "input_data/policy/release_contract.json"
+  ],
+  "reference_members": [
+    "output/",
+    "output/configs/",
+    "output/configs/gamma/",
+    "output/configs/gamma/notify_center.json",
+    "output/configs/gamma/search_boost.json",
+    "output/configs/alpha/",
+    "output/configs/alpha/notify_center.json",
+    "output/configs/alpha/checkout_v2.json",
+    "output/reports/",
+    "output/reports/release_decisions.csv",
+    "output/reports/tenant_release_matrix.csv",
+    "output/reports/release_summary.json",
+    "output/src/",
+    "output/src/compile_release.mjs"
+  ],
+  "answer_sheets": [
+    "交付物答案清单",
+    "固定字段答案",
+    "固定集合答案",
+    "固定数值答案",
+    "允许变体答案"
+  ],
+  "specification_sheets": [
+    "任务规格转化"
+  ]
+}
+

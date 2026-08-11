@@ -1,0 +1,5 @@
+支持Windows11、macOS13及主流64位Linux。主软件为Node.js24LTS，Windows11直接安装后使用npm运行；WSL、Linux容器、Bash与POSIX专用接口都不在运行链中。Node.js进程必须实际解析JSONL和CSV、执行JSON Patch并生成发布文件，静态阅读输入或手工填写报告不能代替运行时处理。
+
+辅助工具为npm、PowerShell以及CSV和JSON查看器。实现可以只使用Node.js标准库，无需第三方npm包。正式运行无需联网，也不访问外部配置平台或版本服务；输入材料均为虚构并已脱敏。Node.js采用开源许可，不需要商业软件许可证。
+
+建议准备1核CPU、1GB内存和500MB可写磁盘，无需GPU或管理员权限。执行账号需要读取input_data并写入output，单次运行超时可设为30秒。本题风险集中在版本段误用字符串比较、JSON Pointer转义错误和test失败后的部分写入；队列格式损坏时应停止发布并清理未完成的报告与配置。

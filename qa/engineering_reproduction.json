@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "table_profile": "ale218",
+  "result": "PASS",
+  "task_id": "10054",
+  "task_slug": "node_feature_flag_tenant_release",
+  "artifacts": {
+    "输入数据包.zip": {
+      "sha256": "bb98c50865de9f3486288f098a3e4f6551a681748eebc92680248ef9fe997231"
+    },
+    "reference.zip": {
+      "sha256": "2aff2879fe88471c5a59ea14da10556ceee746caf8652d663512065ab22a4084"
+    },
+    "关键标准答案.xlsx": {
+      "sha256": "6ec1d15f7a6b4fe89e8a440b233067daeedcc1192294f929f99fbdc250aabbd3"
+    },
+    "任务规格转化.xlsx": {
+      "sha256": "9dc4bf7b9a574b8fe523fb8c466b917c712449d1609623a0fcb424b8044a0c7c"
+    }
+  },
+  "primary_software": {
+    "name": "Node.js",
+    "version": "v24.14.0",
+    "executed": true
+  },
+  "clean_room_runs": [
+    {
+      "root_id": "租户 发布甲",
+      "command": "npm run release",
+      "timeout_seconds": 30,
+      "return_code": 0,
+      "output_started_empty": true,
+      "primary_software_executed": true,
+      "input_unchanged": true,
+      "reference_match": true,
+      "process_runs": 2,
+      "generated_paths": [
+        "output/src/compile_release.mjs",
+        "output/reports/release_decisions.csv",
+        "output/reports/tenant_release_matrix.csv",
+        "output/reports/release_summary.json",
+        "output/configs/alpha/checkout_v2.json",
+        "output/configs/alpha/notify_center.json",
+        "output/configs/gamma/notify_center.json",
+        "output/configs/gamma/search_boost.json"
+      ]
+    },
+    {
+      "root_id": "租户 发布乙",
+      "command": "npm run release",
+      "timeout_seconds": 30,
+      "return_code": 0,
+      "output_started_empty": true,
+      "primary_software_executed": true,
+      "input_unchanged": true,
+      "reference_match": true,
+      "process_runs": 2,
+      "generated_paths": [
+        "output/src/compile_release.mjs",
+        "output/reports/release_decisions.csv",
+        "output/reports/tenant_release_matrix.csv",
+        "output/reports/release_summary.json",
+        "output/configs/alpha/checkout_v2.json",
+        "output/configs/alpha/notify_center.json",
+        "output/configs/gamma/notify_center.json",
+        "output/configs/gamma/search_boost.json"
+      ]
+    }
+  ],
+  "positive_mutations": [
+    {
+      "name": "delta租户灰度上限从5改为10",
+      "input_changed": true,
+      "behavior_changed": true,
+      "assertions_passed": true,
+      "observed_change": "CHG-003对delta租户由tenant_ramp_limit退回变为应用，并新增notify_center配置"
+    }
+  ],
+  "negative_cases": [
+    {
+      "name": "补丁队列含损坏JSON行",
+      "return_code": 1,
+      "failed_closed": true,
+      "no_stale_deliverables": true
+    }
+  ],
+  "line_ending_reproduction": {
+    "lf_final_input_passed": true,
+    "crlf_variant_passed": true,
+    "crlf_reference_match": true
+  },
+  "forbidden_shortcuts": {
+    "no_precomputed_outputs": true,
+    "no_case_id_hardcoding": true,
+    "no_static_only_substitute": true,
+    "no_authoring_directory_dependency": true
+  },
+  "windows_native_reproduction": {
+    "required": true,
+    "windows_command": "npm run release",
+    "original_data_paths": [
+      "input_data/configs/base_flags.json",
+      "input_data/changes/patch_queue.jsonl",
+      "input_data/policy/tenant_policy.csv",
+      "input_data/policy/approvals.csv",
+      "input_data/policy/release_contract.json"
+    ],
+    "windows_software_operations": [
+      "Node.js解析JSON和JSONL发布输入",
+      "Node.js解析两份CSV策略文件",
+      "Node.js按合同顺序执行补丁和租户裁决",
+      "Node.js在临时目录生成报告和租户配置后原子发布"
+    ],
+    "linux_executables": [],
+    "linux_executables_executed": false,
+    "reproduced_after_linux_executables_removed": true,
+    "reference_match_after_removal": true,
+    "no_wsl_required": true,
+    "no_linux_container_required": true,
+    "no_posix_shell_required": true,
+    "no_unix_only_api_required": true,
+    "cross_platform_paths": true,
+    "actual_windows_run": false
+  }
+}

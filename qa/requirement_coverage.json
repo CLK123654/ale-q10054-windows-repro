@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "result": "PASS",
+  "requirements": [
+    {
+      "requirement": "读取开关基线、变更队列、租户政策、审批记录和发布合同",
+      "prompt_evidence": "任务Prompt第一段",
+      "input_source": "input_data下五份业务输入",
+      "reference_evidence": "release_summary.json的sources和compile_release.mjs读取逻辑",
+      "scoring_item": "发布源码与交付结构、租户级裁决与门禁顺序"
+    },
+    {
+      "requirement": "按合同顺序对每个目标租户作唯一裁决",
+      "prompt_evidence": "任务Prompt第二段",
+      "input_source": "release_contract.json、approvals.csv、tenant_policy.csv和patch_queue.jsonl",
+      "reference_evidence": "release_decisions.csv",
+      "scoring_item": "租户级裁决与门禁顺序"
+    },
+    {
+      "requirement": "原子执行JSON Patch并保留租户局部状态",
+      "prompt_evidence": "任务Prompt第二段",
+      "input_source": "patch_queue.jsonl与release_contract.json",
+      "reference_evidence": "compile_release.mjs、release_decisions.csv和output/configs",
+      "scoring_item": "JSON Patch原子执行"
+    },
+    {
+      "requirement": "按租户灰度上限隔离失败",
+      "prompt_evidence": "任务Prompt第二段",
+      "input_source": "tenant_policy.csv的max_ramp",
+      "reference_evidence": "release_decisions.csv和tenant_release_matrix.csv",
+      "scoring_item": "灰度上限与局部失败隔离"
+    },
+    {
+      "requirement": "生成配置、矩阵和可复算摘要",
+      "prompt_evidence": "任务Prompt第三段",
+      "input_source": "五份业务输入和通过裁决后的租户状态",
+      "reference_evidence": "output/configs、tenant_release_matrix.csv和release_summary.json",
+      "scoring_item": "租户矩阵与配置一致性、发布摘要可复算"
+    }
+  ],
+  "unscored_requirements": [],
+  "extra_scoring_requirements": []
+}
