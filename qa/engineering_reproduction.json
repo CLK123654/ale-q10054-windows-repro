@@ -6,21 +6,21 @@
   "task_slug": "node_feature_flag_tenant_release",
   "artifacts": {
     "输入数据包.zip": {
-      "sha256": "d3410bde42db6a5e65a8dccf515630bc1daa3f39c991defab03b8ca41ae75547"
+      "sha256": "bb98c50865de9f3486288f098a3e4f6551a681748eebc92680248ef9fe997231"
     },
     "reference.zip": {
       "sha256": "2aff2879fe88471c5a59ea14da10556ceee746caf8652d663512065ab22a4084"
     },
     "关键标准答案.xlsx": {
-      "sha256": "1736eb2dfa96c99bbf124e3ff3b0c45597ed423edcba5e1e9353997bd6ffaf42"
+      "sha256": "6ec1d15f7a6b4fe89e8a440b233067daeedcc1192294f929f99fbdc250aabbd3"
     },
     "任务规格转化.xlsx": {
-      "sha256": "9c33a6a718625ffb106aa5d21e075c2cc768ef185bcaef58a6145bc52e0845e1"
+      "sha256": "9dc4bf7b9a574b8fe523fb8c466b917c712449d1609623a0fcb424b8044a0c7c"
     }
   },
   "primary_software": {
     "name": "Node.js",
-    "version": "v24.18.1",
+    "version": "v24.14.0",
     "executed": true
   },
   "clean_room_runs": [
@@ -120,48 +120,6 @@
     "no_posix_shell_required": true,
     "no_unix_only_api_required": true,
     "cross_platform_paths": true,
-    "actual_windows_run": true,
-    "github_actions": {
-      "repository": "https://github.com/CLK123654/ale-q10054-windows-repro",
-      "workflow_run_url": "https://github.com/CLK123654/ale-q10054-windows-repro/actions/runs/31582552021",
-      "commit_sha": "2bc80cd455288b5ce11402579ca3e7779eec5971",
-      "runner_image": "windows-2025",
-      "runner_os": "Windows",
-      "platform": "win32",
-      "node_version": "v24.18.1",
-      "conclusion": "success",
-      "workflow_run_id": 31582552021,
-      "job_id": 94068766818,
-      "evidence_artifact": "windows-2025-evidence",
-      "evidence_artifact_digest": "sha256:09d5b6d4cb2aade3d00e8b5084b2a6872c0851546e5a6cff1f3f3ecb99e3ef9c",
-      "repository_visibility": "public",
-      "single_question_repository": true,
-      "shared_matrix_used": false,
-      "artifact_hashes_match": true,
-      "answer_control_gate": "PASS",
-      "linux_executables_removed": true,
-      "reference_match": true,
-      "clean_directory_count": 2,
-      "process_runs_per_directory": 2,
-      "clean_public_history": true,
-      "remote_artifact_deleted_after_download": true,
-      "superseded_runs_deleted": true,
-      "final_success_run_retained": true,
-      "evidence_files": [
-        "clean-a.log",
-        "clean-b.log",
-        "crlf-inputs.log",
-        "negative-invalid-queue.log",
-        "positive-mutation.log",
-        "preflight.json",
-        "windows-audit.json",
-        "windows-reproduction.json"
-      ]
-    }
-  },
-  "online_readback": {
-    "result": "STALE",
-    "reason": "正文和附件更新后必须由主协调者重新完成线上写入与回读",
-    "previous_run_invalidated": true
+    "actual_windows_run": false
   }
 }

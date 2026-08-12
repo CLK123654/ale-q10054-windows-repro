@@ -1,0 +1,8 @@
+{
+  "gate": "full_candidate_natural_language_scan",
+  "source_count": 234,
+  "violations": [],
+  "humanizer_risk_hits": [],
+  "controlled_enum_exemption": "Computing, Data & Mathematical Sciences 计算、数据与数学科学",
+  "pass": true
+}

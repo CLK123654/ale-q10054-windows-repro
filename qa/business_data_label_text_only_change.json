@@ -1,0 +1,97 @@
+{
+  "result": "PASS",
+  "task_key": "id:10054",
+  "change_type": "business_data_label_text_only",
+  "windows_rerun_required": false,
+  "business_semantics_changed": false,
+  "unchanged": [
+    "data",
+    "rules",
+    "code",
+    "attachment_member_structure",
+    "answers",
+    "score_semantics"
+  ],
+  "replacements": [
+    {
+      "file": "ALE-专家数据作业表.csv#环境依赖",
+      "changes": [
+        [
+          "输入材料均为虚构并已脱敏。Node.js采用开源许可，不需要商业软件许可证。",
+          "租户、审批和变更字段已脱敏。"
+        ]
+      ]
+    },
+    {
+      "file": "任务规格转化.xlsx#任务规格转化",
+      "before_sha256": "9c33a6a718625ffb106aa5d21e075c2cc768ef185bcaef58a6145bc52e0845e1",
+      "after_sha256": "628c32e84ba96684de1f03d39f2d2ee554a0c97c2d6d2cb40494eefb4bae5737",
+      "changes": [
+        [
+          "输入来源：虚构并脱敏的功能开关基线、变更队列、租户政策、审批记录和发布合同",
+          "输入来源：字段已脱敏的功能开关基线、变更队列、租户政策、审批记录和发布合同"
+        ],
+        [
+          "可验证点：Node.js进程与版本；五份业务输入读取；语义版本数值比较；JSON Patch原子执行；租户局部失败；矩阵路径；摘要计数与原因分布",
+          "业务核对：核对五份业务输入、语义版本数值比较、JSON Patch原子执行、租户局部失败、矩阵路径，以及摘要计数与原因分布"
+        ],
+        [
+          "不适合作为评分点的内容：函数拆分、变量命名、源码注释、JSON键序与缩进、CSV普通行序、LF或CRLF差异以及不改变规定业务结果的附加工程文件",
+          "实现边界：输入配置、补丁队列和发布规则保持只读，不连接外部配置平台或版本服务，源码、租户配置和报告只写入output目录"
+        ]
+      ]
+    }
+  ],
+  "current_attachment_sha256": {
+    "输入数据包.zip": "d3410bde42db6a5e65a8dccf515630bc1daa3f39c991defab03b8ca41ae75547",
+    "reference.zip": "2aff2879fe88471c5a59ea14da10556ceee746caf8652d663512065ab22a4084",
+    "关键标准答案.xlsx": "1736eb2dfa96c99bbf124e3ff3b0c45597ed423edcba5e1e9353997bd6ffaf42",
+    "任务规格转化.xlsx": "628c32e84ba96684de1f03d39f2d2ee554a0c97c2d6d2cb40494eefb4bae5737"
+  },
+  "scans": {
+    "scope": [
+      "17_fields",
+      "input_zip_all_members",
+      "reference_zip_all_members",
+      "answer_workbook_all_cells",
+      "spec_workbook_all_cells",
+      "public_repo_candidate_text"
+    ],
+    "mixed_boundary_space_natural_language": 0,
+    "quote_natural_language": 0,
+    "controlled_enum_exemption": "Computing, Data & Mathematical Sciences 计算、数据与数学科学",
+    "business_data_label_hits": 0,
+    "process_language_hits": 0,
+    "static_gate": ".qa/business_data_full_static_gate.json"
+  },
+  "specification_semantic_audit": {
+    "two_column_structure": true,
+    "task_id": "node_feature_flag_tenant_release",
+    "task_id_is_name_based_lower_snake_case": true,
+    "input_source_is_current_batch": true,
+    "business_goal_is_realistic": true,
+    "deliverables_are_closed": true,
+    "software_steps_are_operational": true,
+    "implementation_boundary_is_business_facing": true,
+    "table_field_collage_hits": 0,
+    "authoring_or_validation_voice_hits": 0,
+    "ai_template_hits": 0
+  },
+  "humanizer_zh": {
+    "total": 47,
+    "threshold": 45,
+    "online_ai_detection_used_as_conclusion": false,
+    "file": ".qa/humanizer_review.json"
+  },
+  "workbook_visual_review": {
+    "result": "PASS",
+    "preview": "qa/workbooks/任务规格转化.png",
+    "clipped_cells": 0,
+    "formula_errors": 0
+  },
+  "reused_windows_evidence": {
+    "run_id": 31583215380,
+    "run_file": "../../evidence/10054/run.json",
+    "reason": "本次只改数据来源标签、旧环境文本、公开说明和任务规格描述，没有改变业务数据、规则、代码、成员结构、答案或评分语义。"
+  }
+}
