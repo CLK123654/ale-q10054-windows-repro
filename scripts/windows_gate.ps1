@@ -195,6 +195,8 @@ Assert-SpecificationShape (Join-Path $ArtifactsRoot '任务规格转化.xlsx')
 
 $taskTexts = @(Get-ChildItem -LiteralPath (Join-Path $RepositoryRoot 'task') -File -Filter '*.txt' | ForEach-Object { Get-Content -LiteralPath $_.FullName -Raw })
 Assert-NaturalText $taskTexts 'task text'
+$scoreText = Get-Content -LiteralPath (Join-Path $RepositoryRoot 'task/评分表.txt') -Raw
+Assert-True (-not [regex]::IsMatch($scoreText, 'CHG-\d{3}|集合(?:还)?包括|包含(?:alpha|beta|gamma|delta)|依次为|正确值为|(?:applied|rejected|total)=\d+|\d+(?:、\d+){2,}')) 'score table contains sample answer values'
 $answerControlTerms = @('reference.zip', '参考答案', '答案包', '固定哈希', '判卷', '判分', '制题', '候选', '校验器', '验证器', '标准答案控制')
 $inputTextRoot = Join-Path $env:RUNNER_TEMP 'ale-visible-input'
 if (Test-Path -LiteralPath $inputTextRoot) { Remove-Item -LiteralPath $inputTextRoot -Recurse -Force }

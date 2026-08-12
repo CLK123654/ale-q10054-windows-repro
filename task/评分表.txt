@@ -10,56 +10,56 @@
 所属层级：L1任务指令遵循层
 
 检查项：租户级裁决与门禁顺序
-标准答案：release_decisions.csv按输入目标展开为唯一裁决。CHG-001与beta因min_app_version_not_met拒绝，CHG-004与beta因unknown_flag拒绝，CHG-005与alpha因missing_approval拒绝，CHG-007与alpha因invalid_semver拒绝；原因取release_contract.json中的代码。
+标准答案：release_decisions.csv按输入目标展开，每个change_id和tenant_id组合只有一条裁决。门禁依照release_contract.json中的decision_order执行，reason使用合同定义的代码；语义版本按三个非负整数段比较。
 关键字段：release_decisions.csv的change_id、tenant_id、decision、reason；release_contract.json的decision_order和reason_codes
 容差：决策账行序不计分，按change_id和tenant_id比较；版本按三个整数段比较。
 失败边界：目标租户漏裁决或重复裁决，未知开关或未审批变更被接受，版本按字符串比较，或拒绝原因不符合合同顺序。
 可观察证据：决策账、审批表、租户政策、变更队列及语义版本处理代码
-客观硬性标准：每个目标组合恰有一条裁决，四个指定组合的decision与reason逐项正确。
-阈值：唯一性和四个指定组合全部正确。
+客观硬性标准：每个目标组合只有一条裁决，拒绝原因符合合同顺序，版本、开关存在性和审批门禁均能从输入复算。
+阈值：唯一性、原因顺序和三类门禁全部正确。
 优先级：高权重项
 所属层级：L5多源关联与字段一致性层
 
 检查项：JSON Patch原子执行
-标准答案：实现release_contract.json列出的test、replace和add。CHG-006与gamma因test_failed拒绝且search_boost保持CHG-002后的multiplier=1.12和ramp=30；alpha的checkout_v2包含enabled=true、ramp=10以及variants中的A=90、B=10；notify_center增加quiet_hours=22:00-07:00。
+标准答案：实现release_contract.json列出的test、replace和add，JSON Pointer需要正确解码。test不成立时，该目标租户的当前补丁不改变已有状态；通过的补丁应完整写入对应租户配置。
 关键字段：patch_queue.jsonl的patch，release_decisions.csv的reason，output/configs下的配置字段
 容差：JSON空白与键序不计分，数值和布尔值不设容差。
 失败边界：test被忽略，失败补丁留下部分修改，replace或add路径处理错误，或补丁结果与配置文件不一致。
 可观察证据：compile_release.mjs中的JSON Pointer与补丁逻辑、决策账和四份配置
-客观硬性标准：三种操作可执行，失败补丁不改变状态，列出的稳定字段逐项正确。
+客观硬性标准：三种操作可执行，test失败的补丁不改变状态，每份配置都能从基线和该租户已通过的变更顺序复算。
 阈值：三个条件全部成立。
 优先级：高权重项
 所属层级：L8运行验证或可执行行为层
 
 检查项：灰度上限与局部失败隔离
-标准答案：CHG-003在alpha和gamma通过，在delta因tenant_ramp_limit拒绝；通过集合还包括CHG-001与alpha、CHG-002与gamma。一个租户的拒绝不改变同一change_id在其它租户的结果。
+标准答案：补丁完成后，将目标租户的ramp与tenant_policy.csv中的max_ramp比较。超过上限的目标不进入矩阵；同一变更在不同租户独立裁决，一个租户的拒绝不撤销其它租户已通过的结果。
 关键字段：tenant_policy.csv的max_ramp，release_decisions.csv的decision和reason
 容差：按change_id和tenant_id集合比较，行序不计分。
 失败边界：忽略max_ramp，把同一变更的租户结果整体回滚，或被拒绝结果进入发布矩阵。
 可观察证据：租户政策、决策账、租户状态更新代码和矩阵
-客观硬性标准：五个通过组合与相关拒绝组合逐项匹配，delta不出现在配置目录。
-阈值：通过集合、拒绝原因和租户隔离全部正确。
+客观硬性标准：每个目标的灰度裁决可从租户政策复算，被拒绝目标不进入矩阵，不同租户之间没有整体回滚。
+阈值：灰度裁决、矩阵排除和租户隔离全部正确。
 优先级：高权重项
 所属层级：L6领域计算与专业规则层
 
 检查项：租户矩阵与配置一致性
-标准答案：tenant_release_matrix.csv包含alpha的checkout_v2与notify_center、gamma的notify_center与search_boost。每行enabled、ramp和config_path与对应配置一致，矩阵没有被拒绝的组合。
+标准答案：tenant_release_matrix.csv以tenant_id和flag_key作为业务主键，只收录最终通过的租户开关。每行enabled、ramp和config_path与对应配置一致，config_path使用output/configs前缀。
 关键字段：tenant_release_matrix.csv的tenant_id、flag_key、enabled、ramp、config_path；output/configs
 容差：矩阵行序不计分，按tenant_id和flag_key比较；JSON键序不计分。
 失败边界：主键重复或缺失，路径未使用output/configs前缀，配置值与矩阵冲突，或拒绝项进入矩阵。
 可观察证据：矩阵主键集合、配置文件成员及字段值
-客观硬性标准：四个业务主键齐全且唯一，每个路径存在，enabled与ramp逐行一致。
+客观硬性标准：业务主键齐全且唯一，每个路径存在，enabled与ramp逐行一致，被拒绝目标不进入矩阵。
 阈值：主键、路径和值三类检查全部通过。
 优先级：高权重项
 所属层级：L9跨产物一致性与可追溯层
 
 检查项：发布摘要可复算
-标准答案：release_summary.json的batch_id和generated_at_utc来自release_contract.json；decision_counts为applied=4、rejected=6、total=10；released_tenants为alpha和gamma；config_files与矩阵config_path集合一致，rejected_by_reason可从决策账复算。
+标准答案：release_summary.json的batch_id和generated_at_utc来自release_contract.json；decision_counts和rejected_by_reason从release_decisions.csv复算，released_tenants取有矩阵记录的租户，config_files与矩阵中的config_path集合一致。
 关键字段：release_summary.json、release_decisions.csv、tenant_release_matrix.csv、release_contract.json
 容差：JSON键序和集合展示顺序不计分；计数不设容差。
 失败边界：批次信息来源错误，计数与决策账不一致，发布租户包含只有拒绝记录的租户，或配置清单与矩阵冲突。
 可观察证据：摘要JSONPath、决策账行集合、矩阵路径集合和发布合同
-客观硬性标准：批次字段、三项计数、发布租户、原因分布和配置集合均可由指定来源复算。
+客观硬性标准：批次字段、裁决计数、发布租户、原因分布和配置集合均可由指定来源复算。
 阈值：五类内容全部一致。
 优先级：普通项
 所属层级：L9跨产物一致性与可追溯层
