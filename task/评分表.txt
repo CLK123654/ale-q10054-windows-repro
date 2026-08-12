@@ -1,4 +1,7 @@
+总分100分
+
 检查项：发布源码与交付结构
+分值：16分
 标准答案：output/src/compile_release.mjs可由Node.js24执行；output/reports包含release_decisions.csv、tenant_release_matrix.csv和release_summary.json；矩阵列出的每个output/configs路径均存在。
 关键字段：output/src/compile_release.mjs、output/reports、tenant_release_matrix.csv的config_path
 容差：函数拆分、变量名、源码注释和对象键序可以不同；交付相对路径固定。
@@ -10,6 +13,7 @@
 所属层级：L1任务指令遵循层
 
 检查项：租户级裁决与门禁顺序
+分值：18分
 标准答案：release_decisions.csv按输入目标展开，每个change_id和tenant_id组合只有一条裁决。门禁依照release_contract.json中的decision_order执行，reason使用合同定义的代码；语义版本按三个非负整数段比较。
 关键字段：release_decisions.csv的change_id、tenant_id、decision、reason；release_contract.json的decision_order和reason_codes
 容差：决策账行序不计分，按change_id和tenant_id比较；版本按三个整数段比较。
@@ -21,6 +25,7 @@
 所属层级：L5多源关联与字段一致性层
 
 检查项：JSON Patch原子执行
+分值：20分
 标准答案：实现release_contract.json列出的test、replace和add，JSON Pointer需要正确解码。test不成立时，该目标租户的当前补丁不改变已有状态；通过的补丁应完整写入对应租户配置。
 关键字段：patch_queue.jsonl的patch，release_decisions.csv的reason，output/configs下的配置字段
 容差：JSON空白与键序不计分，数值和布尔值不设容差。
@@ -32,6 +37,7 @@
 所属层级：L8运行验证或可执行行为层
 
 检查项：灰度上限与局部失败隔离
+分值：18分
 标准答案：补丁完成后，将目标租户的ramp与tenant_policy.csv中的max_ramp比较。超过上限的目标不进入矩阵；同一变更在不同租户独立裁决，一个租户的拒绝不撤销其它租户已通过的结果。
 关键字段：tenant_policy.csv的max_ramp，release_decisions.csv的decision和reason
 容差：按change_id和tenant_id集合比较，行序不计分。
@@ -43,6 +49,7 @@
 所属层级：L6领域计算与专业规则层
 
 检查项：租户矩阵与配置一致性
+分值：16分
 标准答案：tenant_release_matrix.csv以tenant_id和flag_key作为业务主键，只收录最终通过的租户开关。每行enabled、ramp和config_path与对应配置一致，config_path使用output/configs前缀。
 关键字段：tenant_release_matrix.csv的tenant_id、flag_key、enabled、ramp、config_path；output/configs
 容差：矩阵行序不计分，按tenant_id和flag_key比较；JSON键序不计分。
@@ -54,6 +61,7 @@
 所属层级：L9跨产物一致性与可追溯层
 
 检查项：发布摘要可复算
+分值：12分
 标准答案：release_summary.json的batch_id和generated_at_utc来自release_contract.json；decision_counts和rejected_by_reason从release_decisions.csv复算，released_tenants取有矩阵记录的租户，config_files与矩阵中的config_path集合一致。
 关键字段：release_summary.json、release_decisions.csv、tenant_release_matrix.csv、release_contract.json
 容差：JSON键序和集合展示顺序不计分；计数不设容差。
