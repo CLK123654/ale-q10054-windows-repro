@@ -46,7 +46,7 @@
 标准答案：tenant_release_matrix.csv包含alpha的checkout_v2与notify_center、gamma的notify_center与search_boost。每行enabled、ramp和config_path与对应配置一致，矩阵没有被拒绝的组合。
 关键字段：tenant_release_matrix.csv的tenant_id、flag_key、enabled、ramp、config_path；output/configs
 容差：矩阵行序不计分，按tenant_id和flag_key比较；JSON键序不计分。
-失败边界：主键重复或缺失，路径不是从reference.zip根目录起书写，配置值与矩阵冲突，或拒绝项进入矩阵。
+失败边界：主键重复或缺失，路径未使用output/configs前缀，配置值与矩阵冲突，或拒绝项进入矩阵。
 可观察证据：矩阵主键集合、配置文件成员及字段值
 客观硬性标准：四个业务主键齐全且唯一，每个路径存在，enabled与ramp逐行一致。
 阈值：主键、路径和值三类检查全部通过。

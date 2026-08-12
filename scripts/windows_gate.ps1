@@ -99,6 +99,25 @@ function Get-WorkbookSheetNames {
   }
 }
 
+function Get-WorkbookText {
+  param([string]$WorkbookPath)
+  Add-Type -AssemblyName System.IO.Compression.FileSystem
+  $archive = [System.IO.Compression.ZipFile]::OpenRead($WorkbookPath)
+  try {
+    $parts = @()
+    foreach ($entry in $archive.Entries) {
+      $normalized = $entry.FullName.Replace('\', '/')
+      if ($normalized -ne 'xl/sharedStrings.xml' -and -not $normalized.StartsWith('xl/worksheets/')) { continue }
+      if (-not $normalized.EndsWith('.xml')) { continue }
+      $reader = [System.IO.StreamReader]::new($entry.Open())
+      try { $parts += $reader.ReadToEnd() } finally { $reader.Dispose() }
+    }
+    return $parts -join "`n"
+  } finally {
+    $archive.Dispose()
+  }
+}
+
 function Assert-SpecificationShape {
   param([string]$WorkbookPath)
   Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -127,7 +146,7 @@ function Assert-NaturalText {
   $han = '[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]'
   $boundary = "(?:$han$space[A-Za-z0-9]|[A-Za-z0-9]$space$han|[A-Za-z]$space[0-9]|[0-9]$space[A-Za-z])"
   $riskTerms = @('此外', '至关重要', '深入探讨', '彰显', '赋能', '无缝', '不断演变的格局', '不仅', '不只是', '值得注意的是', '专家认为', '行业报告显示', '观察者指出', '未来展望', '挑战与未来', '——')
-  $processTerms = @('制题返修', '去AI', '修改题目', '规则调整', 'Windows复现', 'GitHub Actions', '双干净目录', '动态变化', '负例', '附件哈希', '飞书回读')
+  $processTerms = @('制题', '返修', '去AI', '修改题目', '规则调整', 'Windows复现', 'Windows验证', 'GitHub Actions', '双干净目录', '动态变化', '失败负例', '附件哈希', '飞书回读', 'reference.zip', '参考答案', '答案包', '固定哈希', '判卷', '判分', '候选', '校验器', '验证器', '标准答案控制')
   foreach ($text in $Texts) {
     foreach ($character in $quoteCharacters) {
       Assert-True (-not $text.Contains([string]$character)) "$Label contains a forbidden quote"
@@ -176,6 +195,23 @@ Assert-SpecificationShape (Join-Path $ArtifactsRoot '任务规格转化.xlsx')
 
 $taskTexts = @(Get-ChildItem -LiteralPath (Join-Path $RepositoryRoot 'task') -File -Filter '*.txt' | ForEach-Object { Get-Content -LiteralPath $_.FullName -Raw })
 Assert-NaturalText $taskTexts 'task text'
+$answerControlTerms = @('reference.zip', '参考答案', '答案包', '固定哈希', '判卷', '判分', '制题', '候选', '校验器', '验证器', '标准答案控制')
+$inputTextRoot = Join-Path $env:RUNNER_TEMP 'ale-visible-input'
+if (Test-Path -LiteralPath $inputTextRoot) { Remove-Item -LiteralPath $inputTextRoot -Recurse -Force }
+Expand-Archive -LiteralPath $inputArchive -DestinationPath $inputTextRoot -Force
+$candidateVisibleTexts = @($taskTexts)
+$candidateVisibleTexts += @(Get-ChildItem -LiteralPath $inputTextRoot -File -Recurse | Where-Object { @('.md', '.txt', '.mjs', '.js', '.json', '.jsonl', '.csv') -contains $_.Extension.ToLowerInvariant() } | ForEach-Object { Get-Content -LiteralPath $_.FullName -Raw })
+$candidateVisibleTexts += Get-WorkbookText (Join-Path $ArtifactsRoot '关键标准答案.xlsx')
+$candidateVisibleTexts += Get-WorkbookText (Join-Path $ArtifactsRoot '任务规格转化.xlsx')
+$referenceTextRoot = Join-Path $env:RUNNER_TEMP 'ale-visible-reference'
+if (Test-Path -LiteralPath $referenceTextRoot) { Remove-Item -LiteralPath $referenceTextRoot -Recurse -Force }
+Expand-Archive -LiteralPath $referenceArchive -DestinationPath $referenceTextRoot -Force
+$candidateVisibleTexts += @(Get-ChildItem -LiteralPath $referenceTextRoot -File -Recurse | Where-Object { @('.md', '.txt', '.mjs', '.js', '.json', '.jsonl', '.csv') -contains $_.Extension.ToLowerInvariant() } | ForEach-Object { Get-Content -LiteralPath $_.FullName -Raw })
+foreach ($text in $candidateVisibleTexts) {
+  foreach ($term in $answerControlTerms) {
+    Assert-True (-not $text.Contains($term)) "candidate-visible content contains answer-control term $term"
+  }
+}
 Assert-NoPublicMetadata
 
 $nodeScript = Join-Path $RepositoryRoot 'scripts/windows_reproduce.mjs'
@@ -195,6 +231,7 @@ Assert-True ($nodeExit -eq 0) "Windows reproduction failed with exit code $nodeE
   reference_members = @($Manifest.reference_members)
   linux_artifact_scan = 'PASS'
   natural_text_gate = 'PASS'
+  answer_control_gate = 'PASS'
   answer_sheets = @($Manifest.answer_sheets)
   specification_sheets = @($Manifest.specification_sheets)
   specification_columns = 2
