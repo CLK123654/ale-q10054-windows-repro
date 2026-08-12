@@ -1,5 +1,7 @@
-操作系统：Windows11、macOS或主流64位Linux。主软件为Node.js，使用兼容Node.js24LTS的运行时；Windows11可在PowerShell中执行npm入口，不依赖WSL、容器或POSIX Shell。
+操作系统：Windows11、macOS或主流64位Linux。
+
+主软件为Node.js，使用兼容Node.js24LTS的运行时；Windows11可在PowerShell中执行npm入口，不依赖WSL、容器或POSIX Shell。
 
 实现只需要Node.js内置的文件系统、路径、JSON和散列能力，不依赖第三方npm包。正式处理只读取本地租户配置、补丁队列、发布策略和Schema，input_data保持只读，output目录可写，不连接外部配置平台或版本服务。
 
-当前租户批次适合普通64位多核CPU和常规办公内存，不使用GPU。磁盘应能容纳输入配置、临时发布状态和交付报告。入口应设置有限超时；超时后检查补丁遍历、Schema检查或文件写入是否停滞。
+当前租户批次适合普通64位多核CPU和常规办公内存，不使用GPU。磁盘应能容纳输入配置、临时发布状态和交付报告。需设置有限超时，覆盖本题批次处理并避免异常无限等待。
