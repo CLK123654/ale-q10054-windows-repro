@@ -1,6 +1,6 @@
 操作系统： Windows11、macOS或主流64位Linux。
 
-主软件为Node.js，使用兼容Node.js24LTS的运行时；Windows11可在PowerShell中执行npm入口，不依赖WSL、容器或POSIX Shell。
+主软件为Node.js，使用兼容Node.js24LTS的运行时；Windows11可在PowerShell中执行npm入口。
 
 实现只需要Node.js内置的文件系统、路径、JSON和散列能力，不依赖第三方npm包。正式处理只读取本地租户配置、补丁队列、发布策略和Schema，input_data保持只读，output目录可写，不连接外部配置平台或版本服务。
 
